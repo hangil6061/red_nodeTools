@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-let detectExtensions = ['json', 'csv', 'mp3'];
+let detectExtensions = ['json', 'csv', 'mp3', 'fnt'];
 let root = '../';
 
 let preload = {};
