@@ -4,9 +4,10 @@ let lang = 'en';
 let title = 'title';
 let framework = [];
 let script = [];
+let root = '../';
 
-addFile( 'framework/', 'js', framework );
-addFile( 'scripts/', 'js', script );
+addFile( 'framework/', 'js', framework, root );
+addFile( 'scripts/', 'js', script, root );
 
 let str =
     '<!DOCTYPE html>\n' +
@@ -26,12 +27,14 @@ let str =
     '</body>\n' +
     '</html>';
 str = stringFormat( str, lang, title, getSrcTagToString(framework), getSrcTagToString( script ) );
-writeFileToString( 'index.html', str );
+writeFileToString( root + 'index.html', str );
 
 
-function addFile( path, extension, fileList )
+function addFile( path, extension, fileList, root )
 {
-    fs.readdirSync(path).forEach(function (file)
+    root = root || '';
+
+    fs.readdirSync(root + path).forEach(function (file)
     {
         let curPath = path + file;
 
@@ -39,7 +42,7 @@ function addFile( path, extension, fileList )
         {
 
         }
-        else if (!fs.lstatSync(curPath).isDirectory())
+        else if (!fs.lstatSync(root + curPath).isDirectory())
         {
             if( file.indexOf( extension ) !== -1)
             {
@@ -48,7 +51,7 @@ function addFile( path, extension, fileList )
         }
         else
         {
-            addFile( curPath + "/", extension, fileList );
+            addFile( curPath + "/", extension, fileList, root );
         }
     });
 }

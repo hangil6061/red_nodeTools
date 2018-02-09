@@ -1,27 +1,30 @@
 const fs = require('fs');
 
 let detectExtensions = ['json', 'csv', 'mp3'];
+let root = '../';
 
 let preload = {};
-preload.atlas = getFileArr( 'assets/atlas/' );
-preload.csv = getFileArr( 'assets/csv/' );
-preload.font = getFileArr( 'assets/font/' );
-preload.image = getFileArr( 'assets/image/' );
-preload.layout = getFileArr( 'assets/layout/' );
-preload.sound = getFileArr( 'assets/sound/' );
-preload.spine = getFileArr( 'assets/spine/' );
-writeFileToString( 'assets/preload.json', JSON.stringify( preload, null, 2 ));
+preload.atlas = getFileArr( 'assets/atlas/', root );
+preload.csv = getFileArr( 'assets/csv/', root );
+preload.font = getFileArr( 'assets/font/', root );
+preload.image = getFileArr( 'assets/image/', root );
+preload.layout = getFileArr( 'assets/layout/', root );
+preload.sound = getFileArr( 'assets/sound/', root );
+preload.spine = getFileArr( 'assets/spine/', root );
+writeFileToString(root + 'assets/preload.json', JSON.stringify( preload, null, 2 ));
 
-function getFileArr( path )
+function getFileArr( path, root )
 {
     let fileArr = [];
-    addFile( path, fileArr );
+    addFile( path, fileArr, root );
     return fileArr;
 }
 
-function addFile( path, fileList )
+function addFile( path, fileList, root )
 {
-    fs.readdirSync(path).forEach(function (file)
+
+
+    fs.readdirSync(root + path).forEach(function (file)
     {
         let curPath = path + file;
 
@@ -29,7 +32,7 @@ function addFile( path, fileList )
         {
 
         }
-        else if (!fs.lstatSync(curPath).isDirectory())
+        else if (!fs.lstatSync(root + curPath).isDirectory())
         {
             for( let i = 0; i < detectExtensions.length; i++ )
             {
@@ -41,7 +44,7 @@ function addFile( path, fileList )
         }
         else
         {
-            addFile( curPath + "/", fileList );
+            addFile( curPath + "/", fileList, root );
         }
     });
 }
