@@ -1,34 +1,41 @@
 const fs = require('fs');
 
-let lang = 'en';
-let title = 'title';
-let framework = [];
-let script = [];
-let root = '../';
+function CreateHtml( title, root, dist, srcRoot, fwRoot, htmlName )
+{
+    title = title || 'title';
+    root = root || '../';
+    srcRoot = srcRoot || 'scripts/';
+    fwRoot = fwRoot || 'framework/';
+    dist = dist || root;
+    htmlName = htmlName || 'index.html';
 
-addFile( 'framework/', 'js', framework, root );
-addFile( 'scripts/', 'js', script, root );
+    let lang = 'en';
+    let framework = [];
+    let script = [];
 
-let str =
-    '<!DOCTYPE html>\n' +
-    '<html lang="{0}">\n' +
-    '<head>\n' +
-    '    <meta charset="UTF-8">\n' +
-    '\n' +
-    '    <title>{1}</title>\n' +
-    '\n' +
-    '{2}\n' +
-    '\n' +
-    '</head>\n' +
-    '<body>\n' +
-    '\n' +
-    '{3}\n' +
-    '\n' +
-    '</body>\n' +
-    '</html>';
-str = stringFormat( str, lang, title, getSrcTagToString(framework), getSrcTagToString( script ) );
-writeFileToString( root + 'index.html', str );
+    addFile( fwRoot, 'js', framework, root );
+    addFile( srcRoot, 'js', script, root );
 
+    let str =
+        '<!DOCTYPE html>\n' +
+        '<html lang="{0}">\n' +
+        '<head>\n' +
+        '    <meta charset="UTF-8">\n' +
+        '\n' +
+        '    <title>{1}</title>\n' +
+        '\n' +
+        '{2}\n' +
+        '\n' +
+        '</head>\n' +
+        '<body>\n' +
+        '\n' +
+        '{3}\n' +
+        '\n' +
+        '</body>\n' +
+        '</html>';
+    str = stringFormat( str, lang, title, getSrcTagToString(framework), getSrcTagToString( script ) );
+    writeFileToString( dist + htmlName, str );
+}
 
 function addFile( path, extension, fileList, root )
 {
@@ -58,7 +65,7 @@ function addFile( path, extension, fileList, root )
 
 function getSrcTagToString( list )
 {
-    str = '';
+    let str = '';
     for( let i = 0; i < list.length; i++ )
     {
         str += stringFormat('    <script src="{0}"></script>\n', list[i]);
@@ -88,3 +95,5 @@ function stringFormat ()
     }
     return theString;
 }
+
+module.exports = CreateHtml;

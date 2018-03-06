@@ -1,17 +1,23 @@
 const fs = require('fs');
 
 let detectExtensions = ['json', 'csv', 'mp3', 'fnt'];
-let root = '../';
 
-let preload = {};
-preload.atlas = getFileArr( 'assets/atlas/', root );
-preload.csv = getFileArr( 'assets/csv/', root );
-preload.font = getFileArr( 'assets/font/', root );
-preload.image = getFileArr( 'assets/image/', root );
-preload.layout = getFileArr( 'assets/layout/', root );
-preload.sound = getFileArr( 'assets/sound/', root );
-preload.spine = getFileArr( 'assets/spine/', root );
-writeFileToString(root + 'assets/preload.json', JSON.stringify( preload, null, 2 ));
+function LoadAssets( root, parName, dist )
+{
+    root = root || '../';
+    parName = parName || '';
+    dist = dist || root;
+    let preload = {};
+    preload.atlas = getFileArr( parName + 'atlas/', root );
+    preload.csv = getFileArr( parName + 'csv/', root );
+    preload.font = getFileArr( parName + 'font/', root );
+    preload.image = getFileArr( parName + 'image/', root );
+    preload.layout = getFileArr( parName + 'layout/', root );
+    preload.sound = getFileArr( parName + 'sound/', root );
+    preload.spine = getFileArr( parName + 'spine/', root );
+
+    writeFileToString(dist + 'preload.json', JSON.stringify( preload, null, 2 ));
+}
 
 function getFileArr( path, root )
 {
@@ -22,8 +28,6 @@ function getFileArr( path, root )
 
 function addFile( path, fileList, root )
 {
-
-
     fs.readdirSync(root + path).forEach(function (file)
     {
         let curPath = path + file;
@@ -62,3 +66,5 @@ function writeFileToString( filePath, str )
 
     });
 }
+
+module.exports = LoadAssets;
