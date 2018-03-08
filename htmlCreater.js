@@ -10,9 +10,11 @@ function CreateHtml( title, root, dist, srcRoot, fwRoot, htmlName )
     htmlName = htmlName || 'index.html';
 
     let lang = 'en';
+    let css = [];
     let framework = [];
     let script = [];
 
+    addFile( '', 'css', css, root );
     addFile( fwRoot, 'js', framework, root );
     addFile( srcRoot, 'js', script, root );
 
@@ -23,17 +25,18 @@ function CreateHtml( title, root, dist, srcRoot, fwRoot, htmlName )
         '    <meta charset="UTF-8">\n' +
         '\n' +
         '    <title>{1}</title>\n' +
-        '\n' +
         '{2}\n' +
+        '\n' +
+        '{3}\n' +
         '\n' +
         '</head>\n' +
         '<body>\n' +
         '\n' +
-        '{3}\n' +
+        '{4}\n' +
         '\n' +
         '</body>\n' +
         '</html>';
-    str = stringFormat( str, lang, title, getSrcTagToString(framework), getSrcTagToString( script ) );
+    str = stringFormat( str, lang, title, getCssToString(css), getSrcTagToString(framework), getSrcTagToString( script ) );
     writeFileToString( dist + htmlName, str );
 }
 
@@ -69,6 +72,16 @@ function getSrcTagToString( list )
     for( let i = 0; i < list.length; i++ )
     {
         str += stringFormat('    <script src="{0}"></script>\n', list[i]);
+    }
+    return str;
+}
+
+function getCssToString( list )
+{
+    let str = '';
+    for( let i = 0; i < list.length; i++ )
+    {
+        str += stringFormat('    <link rel="stylesheet" href="{0}" />\n', list[i]);
     }
     return str;
 }
