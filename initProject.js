@@ -36,16 +36,16 @@ function InitProject(root, prjName, namespaceName)
     }
 
     let mainStr = stringFormat( mainSample, prjName, namespaceName);
-    writeFileToString( root + 'scripts/'+prjName+'main.js', mainStr );
+    writeFileToString2( root + 'scripts/'+prjName+'main.js', mainStr );
 
     let sceneStr = stringFormat( gameSceneSample,  namespaceName);
-    writeFileToString( root + 'scripts/'+prjName+'01_scene/scene_game.js', sceneStr );
+    writeFileToString2( root + 'scripts/'+prjName+'01_scene/scene_game.js', sceneStr );
 
     let configStr = stringFormat( dataGameSample,  namespaceName);
-    writeFileToString( root + 'scripts/'+prjName+'00_data/data_config.js', configStr );
+    writeFileToString2( root + 'scripts/'+prjName+'00_data/data_config.js', configStr );
 
     let dataStr = stringFormat( dataConfigSample,  namespaceName);
-    writeFileToString( root + 'scripts/'+prjName+'00_data/data_game.js', dataStr );
+    writeFileToString2( root + 'scripts/'+prjName+'00_data/data_game.js', dataStr );
 }
 
 
@@ -53,7 +53,27 @@ function writeFileToString( filePath, str )
 {
     fs.open(filePath,'w',function(err)
     {
-        if( err ) console.log( err );
+        if( err ) {
+            console.log( err );
+        }
+        fs.writeFile(filePath, str, function (error)
+        {
+            if( error ) console.log( error );
+        })
+    });
+}
+
+function writeFileToString2( filePath, str )
+{
+    fs.open(filePath,'wx',function(err)
+    {
+        if( err ) {
+            if( err.code === "EEXIST" )
+            {
+                console.log( filePath + " 파일이 이미 존재합니다." );
+                return;
+            }
+        }
         fs.writeFile(filePath, str, function (error)
         {
             if( error ) console.log( error );
