@@ -61,6 +61,7 @@ function writeFileToString( filePath, str )
     });
 }
 
+
 function stringFormat ()
 {
     var theString = arguments[0];
