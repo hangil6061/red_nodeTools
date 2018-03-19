@@ -190,19 +190,16 @@ let dataConfigSample = "var {0} = {0} || {};\n" +
     "\n" +
     "{0}.Data_config = (function ()\n" +
     "{\n" +
-    "    Data_config.startDelay = 1;\n" +
-    "\n" +
+    "    var config = {};\n" +
+    "    config.startDelay = 1;\n" +
     "\n" +
     "    function Data_config()\n" +
     "    {\n" +
-    "       var self = this;\n" +
-    "           Object.keys(Data_config).forEach(function (t) {\n" +
-    "                if( !(Data_config[t] instanceof Object) )\n" +
-    "                {\n" +
-    "                    self[ t ] = Data_config[t];\n" +
-    "                }\n" +
-    "            });\n" +
-    "       return self;\n" +
+    "        var self = this;\n" +
+    "        Object.keys(config).forEach(function (t) {\n" +
+    "            self[ t ] = config[t];\n" +
+    "        });\n" +
+    "        return self;\n" +
     "    }\n" +
     "\n" +
     "    Data_config.set = function (data)\n" +
@@ -210,10 +207,12 @@ let dataConfigSample = "var {0} = {0} || {};\n" +
     "        data = data[0];\n" +
     "        for( var key in data )\n" +
     "        {\n" +
-    "            Data_config[ key ] = parseFloat( data[key] );\n" +
+    "            if( config.hasOwnProperty( key ) )\n" +
+    "            {\n" +
+    "                config[ key ] = parseFloat( data[key] );\n" +
+    "            }\n" +
     "        }\n" +
-    "    };\n" +
-    "\n" +
+    "    };" +
     "    return Data_config;\n" +
     "})();";
 
