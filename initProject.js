@@ -41,10 +41,10 @@ function InitProject(root, prjName, namespaceName)
     let sceneStr = stringFormat( gameSceneSample,  namespaceName);
     writeFileToString2( root + 'scripts/'+prjName+'01_scene/scene_game.js', sceneStr );
 
-    let configStr = stringFormat( dataGameSample,  namespaceName);
+    let configStr = stringFormat( dataConfigSample,  namespaceName);
     writeFileToString2( root + 'scripts/'+prjName+'00_data/data_config.js', configStr );
 
-    let dataStr = stringFormat( dataConfigSample,  namespaceName);
+    let dataStr = stringFormat( dataGameSample,  namespaceName);
     writeFileToString2( root + 'scripts/'+prjName+'00_data/data_game.js', dataStr );
 }
 
@@ -195,7 +195,14 @@ let dataConfigSample = "var {0} = {0} || {};\n" +
     "\n" +
     "    function Data_config()\n" +
     "    {\n" +
-    "        this.startDelay = Data_config.startDelay;\n" +
+    "       var self = this;\n" +
+    "           Object.keys(Data_config).forEach(function (t) {\n" +
+    "                if( !(Data_config[t] instanceof Object) )\n" +
+    "                {\n" +
+    "                    self[ t ] = Data_config[t];\n" +
+    "                }\n" +
+    "            });\n" +
+    "       return self;\n" +
     "    }\n" +
     "\n" +
     "    Data_config.set = function (data)\n" +
