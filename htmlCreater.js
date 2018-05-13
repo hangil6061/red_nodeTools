@@ -48,7 +48,7 @@ function addFile( path, extension, fileList, root )
     {
         let curPath = path + file;
 
-        if( file.indexOf('.git') !== -1)
+        if( file.indexOf('.git') !== -1 || file.indexOf('node_modules') !== -1)
         {
 
         }
