@@ -10,6 +10,7 @@ function LoadAssets( root, parName, dist )
     let preload = {};
     preload.atlas = getFileArr( parName + 'atlas/', root );
     preload.csv = getFileArr( parName + 'csv/', root );
+    preload.data = getFileArr( parName + 'data/', root );
     preload.font = getFileArr( parName + 'font/', root );
     preload.image = getFileArr( parName + 'image/', root );
     preload.layout = getFileArr( parName + 'layout/', root );

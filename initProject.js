@@ -3,8 +3,17 @@ const fs = require('fs');
 function InitProject(root, prjName, namespaceName)
 {
     root = root || '../';
-    prjName = prjName || '';
-    prjName += '/';
+
+    if( prjName )
+    {
+        prjName = prjName || '';
+        prjName += '/';
+    }
+    else
+    {
+        prjName = '';
+    }
+
 
     let dirList = [
         root,
@@ -17,6 +26,7 @@ function InitProject(root, prjName, namespaceName)
         root + 'assets/'+prjName+'layout/',
         root + 'assets/'+prjName+'sound/',
         root + 'assets/'+prjName+'spine/',
+        root + 'assets/'+prjName+'data/',
         root + 'scripts/',
         root + 'scripts/'+prjName,
         root + 'scripts/'+prjName+'00_data/',
@@ -46,6 +56,9 @@ function InitProject(root, prjName, namespaceName)
 
     let dataStr = stringFormat( dataGameSample,  namespaceName);
     writeFileToString2( root + 'scripts/'+prjName+'00_data/data_game.js', dataStr );
+
+    let configJsonStr = stringFormat( dataConfigJsonSample,  namespaceName);
+    writeFileToString2( root + 'assets/'+prjName+'data/config.json', configJsonStr );
 }
 
 
@@ -92,17 +105,17 @@ function stringFormat ()
     return theString;
 }
 
-let mainSample = "var CONTAINER = {\n" +
+let mainSample = "const CONTAINER = {\n" +
     "    bg : 'bg',\n" +
     "    game : 'game',\n" +
     "    ui : 'ui',\n" +
     "};\n" +
     "\n" +
-    "var SCENE = {\n" +
+    "const SCENE = {\n" +
     "    game : 'game',\n" +
     "};\n" +
     "\n" +
-    "var EVENT = {\n" +
+    "const EVENT = {\n" +
     "    gameStart : 'gameStart',\n" +
     "    gameOver : 'gameOver',\n" +
     "};\n" +
@@ -114,6 +127,9 @@ let mainSample = "var CONTAINER = {\n" +
     "    {\n" +
     "        var game = new Red.Game({width:720, height:1280, resolution : 1, antialias : false, backgroundColor : 0x000000});\n" +
     "        game.resources = resources;\n" +
+    "\n" +
+    "        game.config = new {1}.Data_config(resources[\"config\"].data);\n" +
+    "        game.data = new {1}.Data_game();\n" +
     "\n" +
     "        Object.keys(CONTAINER).forEach(function (t) {\n" +
     "            game.factory.container(t);\n" +
@@ -137,8 +153,6 @@ let gameSceneSample = "var {0} = {0} || {};\n" +
     "\n" +
     "        create : function ()\n" +
     "        {\n" +
-    "            this.game.config = new {0}.Data_config();\n" +
-    "            this.game.data = new {0}.Data_game();\n" +
     "        },\n" +
     "\n" +
     "        start : function ()\n" +
@@ -190,30 +204,44 @@ let dataConfigSample = "var {0} = {0} || {};\n" +
     "\n" +
     "{0}.Data_config = (function ()\n" +
     "{\n" +
-    "    var config = {};\n" +
-    "    config.startDelay = 1;\n" +
-    "\n" +
     "    function Data_config()\n" +
     "    {\n" +
-    "        var self = this;\n" +
-    "        Object.keys(config).forEach(function (t) {\n" +
-    "            self[ t ] = config[t];\n" +
-    "        });\n" +
-    "        return self;\n" +
     "    }\n" +
     "\n" +
-    "    Data_config.set = function (data)\n" +
+    "    Data_config.parse = function (parseObject)\n" +
     "    {\n" +
-    "        data = data[0];\n" +
-    "        for( var key in data )\n" +
+    "        return parse( {}, parseObject );\n" +
+    "    };\n" +
+    "\n" +
+    "    function parse( obj, parseObject )\n" +
+    "    {\n" +
+    "        for( var o in parseObject )\n" +
     "        {\n" +
-    "            if( config.hasOwnProperty( key ) )\n" +
+    "            if( !parseObject.hasOwnProperty( o ) ) continue;\n" +
+    "\n" +
+    "            if( parseObject[o].def !== undefined)\n" +
     "            {\n" +
-    "                config[ key ] = parseFloat( data[key] );\n" +
+    "                obj[ o ] = parseObject[o].def;\n" +
+    "            }\n" +
+    "            else\n" +
+    "            {\n" +
+    "                obj[ o ] = {};\n" +
+    "                parse( obj[ o ], parseObject[o] )\n" +
     "            }\n" +
     "        }\n" +
-    "    };" +
+    "        return obj;\n" +
+    "    }\n" +
+    "\n" +
     "    return Data_config;\n" +
     "})();";
+
+let dataConfigJsonSample = "{\n" +
+    "  \"Sample\" : {\n" +
+    "    \"def\" : 15,\n" +
+    "    \"min\" : 1,\n" +
+    "    \"max\" : 99,\n" +
+    "    \"step\" : 1\n" +
+    "  },\n" +
+    "}";
 
 module.exports = InitProject;
