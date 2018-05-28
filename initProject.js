@@ -128,7 +128,7 @@ let mainSample = "const CONTAINER = {\n" +
     "        var game = new Red.Game({width:720, height:1280, resolution : 1, antialias : false, backgroundColor : 0x000000});\n" +
     "        game.resources = resources;\n" +
     "\n" +
-    "        game.config = new {1}.Data_config(resources[\"config\"].data);\n" +
+    "        game.config = new {1}.Data_config.parse(resources[\"config\"].data);\n" +
     "        game.data = new {1}.Data_game();\n" +
     "\n" +
     "        Object.keys(CONTAINER).forEach(function (t) {\n" +
