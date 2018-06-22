@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-let detectExtensions = ['json', 'csv', 'mp3', 'fnt'];
+let detectExtensions = ['json', 'csv', 'mp3', 'fnt', 'png', 'jpg'];
 
 function LoadAssets( root, parName, dist )
 {
