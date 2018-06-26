@@ -1,6 +1,7 @@
 const fs = require('fs');
 
 let detectExtensions = ['json', 'csv', 'mp3', 'fnt', 'png', 'jpg'];
+let detectExtensions2 = ['json'];
 
 function LoadAssets( root, parName, dist )
 {
@@ -8,7 +9,7 @@ function LoadAssets( root, parName, dist )
     parName = parName || '';
     dist = dist || root;
     let preload = {};
-    preload.atlas = getFileArr( parName + 'atlas/', root );
+    preload.atlas = getFileArr( parName + 'atlas/', root, detectExtensions2 );
     preload.csv = getFileArr( parName + 'csv/', root );
     preload.data = getFileArr( parName + 'data/', root );
     preload.font = getFileArr( parName + 'font/', root );
@@ -20,14 +21,15 @@ function LoadAssets( root, parName, dist )
     writeFileToString(dist + 'preload.json', JSON.stringify( preload, null, 2 ));
 }
 
-function getFileArr( path, root )
+function getFileArr( path, root, extensions )
 {
+    extensions = extensions || detectExtensions;
     let fileArr = [];
-    addFile( path, fileArr, root );
+    addFile( path, fileArr, root, extensions );
     return fileArr;
 }
 
-function addFile( path, fileList, root )
+function addFile( path, fileList, root, extensions )
 {
     fs.readdirSync(root + path).forEach(function (file)
     {
@@ -39,11 +41,11 @@ function addFile( path, fileList, root )
         }
         else if (!fs.lstatSync(root + curPath).isDirectory())
         {
-            for( let i = 0; i < detectExtensions.length; i++ )
+            for( let i = 0; i < extensions.length; i++ )
             {
-                if( file.indexOf( detectExtensions[i] ) === -1) continue;
+                if( file.indexOf( extensions[i] ) === -1) continue;
 
-                fileList.push( { key : file.replace('.' + detectExtensions[i], ''), path : curPath } );
+                fileList.push( { key : file.replace('.' + extensions[i], ''), path : curPath } );
                 break;
             }
         }
