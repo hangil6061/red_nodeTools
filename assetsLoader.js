@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 let detectExtensions = ['json', 'csv', 'mp3', 'fnt', 'png', 'jpg'];
-let detectExtensions2 = ['json'];
+let detectExtensions2 = ['json', 'fnt'];
 
 function LoadAssets( root, parName, dist )
 {
@@ -12,7 +12,7 @@ function LoadAssets( root, parName, dist )
     preload.atlas = getFileArr( parName + 'atlas/', root, detectExtensions2 );
     preload.csv = getFileArr( parName + 'csv/', root );
     preload.data = getFileArr( parName + 'data/', root );
-    preload.font = getFileArr( parName + 'font/', root );
+    preload.font = getFileArr( parName + 'font/', root, detectExtensions2 );
     preload.image = getFileArr( parName + 'image/', root );
     preload.layout = getFileArr( parName + 'layout/', root );
     preload.sound = getFileArr( parName + 'sound/', root );
