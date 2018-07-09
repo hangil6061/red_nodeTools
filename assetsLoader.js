@@ -16,7 +16,7 @@ function LoadAssets( root, parName, dist )
     preload.image = getFileArr( parName + 'image/', root );
     preload.layout = getFileArr( parName + 'layout/', root );
     preload.sound = getFileArr( parName + 'sound/', root );
-    preload.spine = getFileArr( parName + 'spine/', root );
+    preload.spine = getFileArr( parName + 'spine/', root, detectExtensions2 );
 
     writeFileToString(dist + 'preload.json', JSON.stringify( preload, null, 2 ));
 }
@@ -51,7 +51,7 @@ function addFile( path, fileList, root, extensions )
         }
         else
         {
-            addFile( curPath + "/", fileList, root );
+            addFile( curPath + "/", fileList, root, extensions);
         }
     });
 }
